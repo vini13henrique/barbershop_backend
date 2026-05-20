@@ -1,0 +1,19 @@
+services:
+  postgres:
+    image: postgres:14
+
+    container_name: barbershop-postgres
+
+    environment:
+      POSTGRES_DB: barbershop_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 304613vh
+
+    ports:
+      - "5433:5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
