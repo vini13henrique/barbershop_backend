@@ -1,5 +1,6 @@
 package com.barbershop.barbershop.controller;
 
+import com.barbershop.barbershop.dto.ClientRequestDTO;
 import com.barbershop.barbershop.entity.Client;
 import com.barbershop.barbershop.service.ClientService;
 import org.springframework.http.HttpStatus;
@@ -25,8 +26,8 @@ public class ClientController {
     }
 
     @PostMapping()
-    public ResponseEntity<Client> createClient(@RequestBody Client client) {
-        Client clientNovo = clientService.createClient(client);
+    public ResponseEntity<Client> createClient(@RequestBody ClientRequestDTO clientRequestDTO) {
+        Client clientNovo = clientService.createClient(clientRequestDTO);
         return ResponseEntity.status(201).body(clientNovo);
 
     }
