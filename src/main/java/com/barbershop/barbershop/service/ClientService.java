@@ -2,11 +2,13 @@ package com.barbershop.barbershop.service;
 
 import com.barbershop.barbershop.dto.ClientRequestDTO;
 import com.barbershop.barbershop.entity.Client;
+import com.barbershop.barbershop.exception.ClientNotFoundException;
 import com.barbershop.barbershop.exception.InvalidClientDataException;
 import com.barbershop.barbershop.repository.ClientRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ClientService {
@@ -39,6 +41,13 @@ public class ClientService {
         clientEntity.setName(nome);
         clientEntity.setPhone(phone);
         return clientRepository.save(clientEntity);
+
+    }
+
+
+    public Client findById(Long id) {
+        return clientRepository.findById(id).orElseThrow(()
+                -> new ClientNotFoundException("Erro: cliente não encontrado com id " + id));
 
     }
 }
