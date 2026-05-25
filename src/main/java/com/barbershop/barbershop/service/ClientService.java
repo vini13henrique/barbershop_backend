@@ -2,6 +2,7 @@ package com.barbershop.barbershop.service;
 
 import com.barbershop.barbershop.dto.ClientRequestDTO;
 import com.barbershop.barbershop.entity.Client;
+import com.barbershop.barbershop.exception.InvalidClientDataException;
 import com.barbershop.barbershop.repository.ClientRepository;
 import org.springframework.stereotype.Service;
 
@@ -28,15 +29,15 @@ public class ClientService {
 
         //validaçap nome não pode ser nulo ou está vazio
         if (nome == null || nome.trim().isEmpty()) {
-            throw new RuntimeException("Erro: nome não pode ser nulo ou  está vazio");
+            throw new InvalidClientDataException("Erro: nome não pode ser nulo ou  está vazio");
         }
 
         //validaçao phone não pode ser nulo ou está vazio
         if (phone == null || phone.trim().isEmpty()) {
-            throw new RuntimeException("Erro: Número de telefone não poder ser nulo ou está vazio");
+            throw new InvalidClientDataException("Erro: Número de telefone não poder ser nulo ou está vazio");
         }
-        clientEntity.setName(client.getName());
-        clientEntity.setPhone(client.getPhone());
+        clientEntity.setName(nome);
+        clientEntity.setPhone(phone);
         return clientRepository.save(clientEntity);
 
     }
