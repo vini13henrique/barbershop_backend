@@ -44,10 +44,33 @@ public class ClientService {
 
     }
 
-
     public Client findById(Long id) {
         return clientRepository.findById(id).orElseThrow(()
                 -> new ClientNotFoundException("Erro: cliente não encontrado com id " + id));
 
+    }
+
+    public Client updateClient(Long id, ClientRequestDTO clientRequestDTO) {
+        Client client = clientRepository.findById(id).orElseThrow(() -> new ClientNotFoundException("Erro: cliente não encontrado com id " + id));
+
+        String name = clientRequestDTO.getName();
+        String phone = clientRequestDTO.getPhone();
+
+        if (name == null || name.trim().isEmpty()) {
+            throw new InvalidClientDataException("Erro: nome não pode ser nulo ou  está vazio");
+        }
+
+        if (phone == null || phone.trim().isEmpty()) {
+            throw new InvalidClientDataException("Erro: Número de telefone não poder ser nulo ou está vazio");
+        }
+
+        client.setName(name);
+        client.setPhone(phone);
+        return clientRepository.save(client);
+    }
+
+    public void deleteClient(Long id) {
+        Client client = clientRepository.findById(id).orElseThrow(() -> new ClientNotFoundException("Erro: cliente não encontrado com id " + id));
+        clientRepository.delete(client);
     }
 }
