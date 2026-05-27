@@ -1,23 +1,30 @@
 package com.barbershop.barbershop.exception;
 
+import com.barbershop.barbershop.dto.ErrorResponseDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.time.LocalDateTime;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(InvalidClientDataException.class)
-    public ResponseEntity<String> handlerInvalidClientData(InvalidClientDataException exception) {
+    public ResponseEntity<ErrorResponseDTO> handlerInvalidClientData(InvalidClientDataException exception) {
 
-        return ResponseEntity.badRequest().body(exception.getMessage());
+        ErrorResponseDTO erro = new ErrorResponseDTO(400, exception.getMessage(), LocalDateTime.now());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
     }
 
     @ExceptionHandler(ClientNotFoundException.class)
-    public ResponseEntity<String> handlerClientNotFound(ClientNotFoundException exception) {
+    public ResponseEntity<ErrorResponseDTO> handlerClientNotFound(ClientNotFoundException exception) {
 
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+        ErrorResponseDTO erro = new ErrorResponseDTO(404, exception.getMessage(), LocalDateTime.now());
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erro);
     }
 
 }
