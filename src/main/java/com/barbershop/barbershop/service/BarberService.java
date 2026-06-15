@@ -13,7 +13,7 @@ import java.util.List;
 @Service
 public class BarberService {
 
-    private BarberRepository barberRepository;
+    private final BarberRepository barberRepository;
 
     public BarberService(BarberRepository barberRepository) {
         this.barberRepository = barberRepository;
