@@ -55,10 +55,15 @@ public class AppointmentService {
 
         Client client = clientRepository.findById(clientId).orElseThrow(() -> new ClientNotFoundException("Cliente com id " + clientId + " Não existe"));
 
-        boolean horarioOcupado = appointmentRepository.existsByBarberIdAndAppointmentDate(barberId, appointmentDate);
+        boolean horarioOcupadoBarber = appointmentRepository.existsByBarberIdAndAppointmentDate(barberId, appointmentDate);
+        boolean horarioOcupadoClient = appointmentRepository.existsByClientIdAndAppointmentDate(clientId, appointmentDate);
 
-        if (horarioOcupado == true) {
+        if (horarioOcupadoBarber) {
             throw new InvalidAppointmentDataException("Erro: Barbeiro já possui agendamento nesse horário");
+        }
+
+        if(horarioOcupadoClient){
+            throw new InvalidAppointmentDataException("Erro: Cliente já possui agendamento nesse horário");
         }
 
         Appointment appointment = new Appointment(appointmentDate, barber, client);
