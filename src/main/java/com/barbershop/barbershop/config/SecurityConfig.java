@@ -16,7 +16,7 @@ public class SecurityConfig {
 
         // desabilita proteção CSRF para API REST
         http.csrf(csrf -> csrf.disable())
-
+                .cors(Customizer.withDefaults())
                 // define regras de autorização das requisições HTTP
                 .authorizeHttpRequests(auth ->
 
@@ -26,6 +26,7 @@ public class SecurityConfig {
 
                 // habilita autenticação Basic Auth com configuração padrão
                 .httpBasic(Customizer.withDefaults());
+
 
         // constrói e retorna cadeia final de filtros de segurança
         return http.build();
