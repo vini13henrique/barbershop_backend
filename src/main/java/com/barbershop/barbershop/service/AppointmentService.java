@@ -62,7 +62,7 @@ public class AppointmentService {
             throw new InvalidAppointmentDataException("Erro: Barbeiro já possui agendamento nesse horário");
         }
 
-        if(horarioOcupadoClient){
+        if (horarioOcupadoClient) {
             throw new InvalidAppointmentDataException("Erro: Cliente já possui agendamento nesse horário");
         }
 
@@ -118,6 +118,16 @@ public class AppointmentService {
             throw new InvalidAppointmentDataException("Erro: Id não pode ser nulo ou está vazio");
         }
         Client client = clientRepository.findById(clientId).orElseThrow(() -> new ClientNotFoundException("Cliente com id " + clientId + " Não existe"));
+        boolean horarioOcupadoBarber = appointmentRepository.existsByBarberIdAndAppointmentDateAndIdNot(barberId, appointmentDate, id);
+        boolean horarioOcupadoClient = appointmentRepository.existsByClientIdAndAppointmentDateAndIdNot(clientId, appointmentDate, id);
+
+        if (horarioOcupadoBarber == true) {
+            throw new InvalidAppointmentDataException("Barbeiro já possui agendamento nesse horário");
+        }
+
+        if(horarioOcupadoClient==true){
+            throw new InvalidAppointmentDataException("Client já possui agendamento nesse horário");
+        }
 
         saveAppointment.setAppointmentDate(appointmentDate);
         saveAppointment.setBarber(barber);
