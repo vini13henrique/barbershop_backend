@@ -2,7 +2,6 @@ package com.barbershop.barbershop.service;
 
 import com.barbershop.barbershop.dto.ClientRequestDTO;
 import com.barbershop.barbershop.dto.ClientResponseDTO;
-import com.barbershop.barbershop.entity.Appointment;
 import com.barbershop.barbershop.entity.Client;
 import com.barbershop.barbershop.exception.ClientNotFoundException;
 import com.barbershop.barbershop.exception.InvalidClientDataException;
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ClientService {

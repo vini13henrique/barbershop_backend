@@ -2,10 +2,7 @@ package com.barbershop.barbershop.controller;
 
 import com.barbershop.barbershop.dto.ClientRequestDTO;
 import com.barbershop.barbershop.dto.ClientResponseDTO;
-import com.barbershop.barbershop.entity.Client;
 import com.barbershop.barbershop.service.ClientService;
-import jakarta.persistence.Id;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

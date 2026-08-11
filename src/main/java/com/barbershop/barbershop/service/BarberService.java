@@ -1,13 +1,14 @@
 package com.barbershop.barbershop.service;
 
 import com.barbershop.barbershop.dto.BarberRequestDTO;
+import com.barbershop.barbershop.dto.BarberResponseDTO;
 import com.barbershop.barbershop.entity.Barber;
 import com.barbershop.barbershop.exception.BarberNotFoundException;
 import com.barbershop.barbershop.exception.InvalidBarberDataException;
 import com.barbershop.barbershop.repository.BarberRepository;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -19,12 +20,20 @@ public class BarberService {
         this.barberRepository = barberRepository;
     }
 
-    public List<Barber> findAll() {
+    public List<BarberResponseDTO> findAll() {
         List<Barber> barbers = barberRepository.findAll();
-        return barbers;
+        List<BarberResponseDTO> barberResponseDTOS = new ArrayList<>();
+
+        for (Barber barber : barbers) {
+
+            BarberResponseDTO barberResponseDTO = new BarberResponseDTO(barber.getId(), barber.getName(), barber.getSpecialty());
+            barberResponseDTOS.add(barberResponseDTO);
+
+        }
+        return barberResponseDTOS;
     }
 
-    public Barber createBarber(BarberRequestDTO barber) {
+    public BarberResponseDTO createBarber(BarberRequestDTO barber) {
         Barber barberEntity = new Barber();
         String name = barber.getName();
         String specialty = barber.getSpecialty();
@@ -38,15 +47,20 @@ public class BarberService {
         }
         barberEntity.setName(name);
         barberEntity.setSpecialty(specialty);
-        return barberRepository.save(barberEntity);
+
+        Barber savedBarber = barberRepository.save(barberEntity);
+        BarberResponseDTO barberResponseDTO = new BarberResponseDTO(savedBarber.getId(), savedBarber.getName(), savedBarber.getSpecialty());
+        return barberResponseDTO;
     }
 
-    public Barber findById(Long id) {
-        return barberRepository.findById(id).orElseThrow(()
+    public BarberResponseDTO findById(Long id) {
+        Barber barber = barberRepository.findById(id).orElseThrow(()
                 -> new BarberNotFoundException("Erro: barbeiro não encontrado com id: " + id));
+        BarberResponseDTO barberResponseDTO = new BarberResponseDTO(barber.getId(), barber.getName(), barber.getSpecialty());
+        return barberResponseDTO;
     }
 
-    public Barber updateBarber(Long id, BarberRequestDTO barberRequestDTO) {
+    public BarberResponseDTO updateBarber(Long id, BarberRequestDTO barberRequestDTO) {
         Barber barber = barberRepository.findById(id).orElseThrow(() -> new BarberNotFoundException("Erro: barbeiro não encontrado com id: " + id));
 
         String name = barberRequestDTO.getName();
@@ -62,7 +76,10 @@ public class BarberService {
 
         barber.setName(name);
         barber.setSpecialty(specialty);
-        return barberRepository.save(barber);
+        Barber savedBarber = barberRepository.save(barber);
+        BarberResponseDTO barberResponseDTO = new BarberResponseDTO(savedBarber.getId(), savedBarber.getName(), savedBarber.getSpecialty());
+        return barberResponseDTO;
+
     }
 
     public void deleteBarber(Long id) {

@@ -2,7 +2,6 @@ package com.barbershop.barbershop.controller;
 
 import com.barbershop.barbershop.dto.AppointmentRequestDTO;
 import com.barbershop.barbershop.dto.AppointmentResponseDTO;
-import com.barbershop.barbershop.entity.Appointment;
 import com.barbershop.barbershop.service.AppointmentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
