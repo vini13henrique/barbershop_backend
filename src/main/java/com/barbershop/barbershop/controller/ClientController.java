@@ -1,6 +1,7 @@
 package com.barbershop.barbershop.controller;
 
 import com.barbershop.barbershop.dto.ClientRequestDTO;
+import com.barbershop.barbershop.dto.ClientResponseDTO;
 import com.barbershop.barbershop.entity.Client;
 import com.barbershop.barbershop.service.ClientService;
 import jakarta.persistence.Id;
@@ -21,29 +22,29 @@ public class ClientController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<Client>> findAll() {
-        List<Client> clients = clientService.findAll();
-        return ResponseEntity.ok(clients);
+    public ResponseEntity<List<ClientResponseDTO>> findAll() {
+        List<ClientResponseDTO> clientsDto = clientService.findAll();
+        return ResponseEntity.ok(clientsDto);
     }
 
     @PostMapping()
-    public ResponseEntity<Client> createClient(@RequestBody ClientRequestDTO clientRequestDTO) {
-        Client clientNovo = clientService.createClient(clientRequestDTO);
-        return ResponseEntity.status(201).body(clientNovo);
+    public ResponseEntity<ClientResponseDTO> createClient(@RequestBody ClientRequestDTO clientRequestDTO) {
+        ClientResponseDTO clientResponseDTO = clientService.createClient(clientRequestDTO);
+        return ResponseEntity.status(201).body(clientResponseDTO);
 
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Client> findById(@PathVariable Long id) {
-        Client client = clientService.findById(id);
-        return ResponseEntity.ok(client);
+    public ResponseEntity<ClientResponseDTO> findById(@PathVariable Long id) {
+        ClientResponseDTO clientResponseDTO = clientService.findById(id);
+        return ResponseEntity.ok(clientResponseDTO);
 
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Client> updateClient(@PathVariable Long id, @RequestBody ClientRequestDTO clientRequestDTO) {
-        Client client = clientService.updateClient(id, clientRequestDTO);
-        return ResponseEntity.ok(client);
+    public ResponseEntity<ClientResponseDTO> updateClient(@PathVariable Long id, @RequestBody ClientRequestDTO clientRequestDTO) {
+        ClientResponseDTO clientResponseDTO = clientService.updateClient(id, clientRequestDTO);
+        return ResponseEntity.ok(clientResponseDTO);
     }
 
     @DeleteMapping("/{id}")

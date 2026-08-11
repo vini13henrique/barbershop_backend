@@ -1,12 +1,15 @@
 package com.barbershop.barbershop.service;
 
 import com.barbershop.barbershop.dto.ClientRequestDTO;
+import com.barbershop.barbershop.dto.ClientResponseDTO;
+import com.barbershop.barbershop.entity.Appointment;
 import com.barbershop.barbershop.entity.Client;
 import com.barbershop.barbershop.exception.ClientNotFoundException;
 import com.barbershop.barbershop.exception.InvalidClientDataException;
 import com.barbershop.barbershop.repository.ClientRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,12 +22,20 @@ public class ClientService {
         this.clientRepository = clientRepository;
     }
 
-    public List<Client> findAll() {
+    public List<ClientResponseDTO> findAll() {
         List<Client> clients = clientRepository.findAll();
-        return clients;
+        List<ClientResponseDTO> clientResponseDTOS = new ArrayList<>();
+
+        for(Client client : clients){
+
+            ClientResponseDTO dto = new ClientResponseDTO(client.getId(), client.getName(), client.getPhone());
+            clientResponseDTOS.add(dto);
+        }
+
+        return clientResponseDTOS;
     }
 
-    public Client createClient(ClientRequestDTO client) {
+    public ClientResponseDTO createClient(ClientRequestDTO client) {
         Client clientEntity = new Client();
         String nome = client.getName();
         String phone = client.getPhone();
@@ -40,17 +51,26 @@ public class ClientService {
         }
         clientEntity.setName(nome);
         clientEntity.setPhone(phone);
-        return clientRepository.save(clientEntity);
+
+        Client savedClient = clientRepository.save(clientEntity);
+
+        ClientResponseDTO clientResponseDTO = new ClientResponseDTO(
+                savedClient.getId(),
+                savedClient.getName(),
+                savedClient.getPhone()
+        );
+
+        return clientResponseDTO;
 
     }
 
-    public Client findById(Long id) {
-        return clientRepository.findById(id).orElseThrow(()
-                -> new ClientNotFoundException("Erro: cliente não encontrado com id " + id));
-
+    public ClientResponseDTO findById(Long id) {
+        Client client = clientRepository.findById(id).orElseThrow(() -> new ClientNotFoundException("Erro: cliente não encontrado com id " + id));
+        ClientResponseDTO clientResponseDTO = new ClientResponseDTO(client.getId(), client.getName(), client.getPhone());
+        return clientResponseDTO;
     }
 
-    public Client updateClient(Long id, ClientRequestDTO clientRequestDTO) {
+    public ClientResponseDTO updateClient(Long id, ClientRequestDTO clientRequestDTO) {
         Client client = clientRepository.findById(id).orElseThrow(() -> new ClientNotFoundException("Erro: cliente não encontrado com id " + id));
 
         String name = clientRequestDTO.getName();
@@ -66,8 +86,18 @@ public class ClientService {
 
         client.setName(name);
         client.setPhone(phone);
-        return clientRepository.save(client);
+
+        Client atualizarCliente = clientRepository.save(client);
+
+        ClientResponseDTO clientResponseDTO = new ClientResponseDTO(
+                atualizarCliente.getId(),
+                atualizarCliente.getName(),
+                atualizarCliente.getPhone()
+        );
+        return clientResponseDTO;
     }
+
+    ;
 
     public void deleteClient(Long id) {
         Client client = clientRepository.findById(id).orElseThrow(() -> new ClientNotFoundException("Erro: cliente não encontrado com id " + id));
