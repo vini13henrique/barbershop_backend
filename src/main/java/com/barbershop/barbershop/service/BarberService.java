@@ -39,11 +39,11 @@ public class BarberService {
         String specialty = barber.getSpecialty();
 
         if (name == null || name.trim().isEmpty()) {
-            throw new InvalidBarberDataException("Erro: nome não pode ser nulo ou vazio");
+            throw new InvalidBarberDataException("Nome do barbeiro é obrigatório.");
         }
 
         if (specialty == null || specialty.trim().isEmpty()) {
-            throw new InvalidBarberDataException("Erro: especialidade não pode ser nulo ou vazio");
+            throw new InvalidBarberDataException("Especialidade do barbeiro é obrigatória.");
         }
         barberEntity.setName(name);
         barberEntity.setSpecialty(specialty);
@@ -55,23 +55,23 @@ public class BarberService {
 
     public BarberResponseDTO findById(Long id) {
         Barber barber = barberRepository.findById(id).orElseThrow(()
-                -> new BarberNotFoundException("Erro: barbeiro não encontrado com id: " + id));
+                -> new BarberNotFoundException("Barbeiro não encontrado com ID: " + id));
         BarberResponseDTO barberResponseDTO = new BarberResponseDTO(barber.getId(), barber.getName(), barber.getSpecialty());
         return barberResponseDTO;
     }
 
     public BarberResponseDTO updateBarber(Long id, BarberRequestDTO barberRequestDTO) {
-        Barber barber = barberRepository.findById(id).orElseThrow(() -> new BarberNotFoundException("Erro: barbeiro não encontrado com id: " + id));
+        Barber barber = barberRepository.findById(id).orElseThrow(() -> new BarberNotFoundException("Barbeiro não encontrado com ID: " + id));
 
         String name = barberRequestDTO.getName();
         String specialty = barberRequestDTO.getSpecialty();
 
         if (name == null || name.trim().isEmpty()) {
-            throw new InvalidBarberDataException("Erro: nome não pode ser vazio ou nulo");
+            throw new InvalidBarberDataException("Nome do barbeiro é obrigatório.");
         }
 
         if (specialty == null || specialty.trim().isEmpty()) {
-            throw new InvalidBarberDataException("Erro: especialidade não pode ser vazio ou nulo");
+            throw new InvalidBarberDataException("Especialidade do barbeiro é obrigatória.");
         }
 
         barber.setName(name);
@@ -83,7 +83,7 @@ public class BarberService {
     }
 
     public void deleteBarber(Long id) {
-        Barber barber = barberRepository.findById(id).orElseThrow(() -> new BarberNotFoundException("Erro: barbeiro não encontrado com id: " + id));
+        Barber barber = barberRepository.findById(id).orElseThrow(() -> new BarberNotFoundException("Barbeiro não encontrado com ID: " + id));
         barberRepository.delete(barber);
     }
 

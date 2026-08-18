@@ -40,12 +40,12 @@ public class ClientService {
 
         //validaçap nome não pode ser nulo ou está vazio
         if (nome == null || nome.trim().isEmpty()) {
-            throw new InvalidClientDataException("Erro: nome não pode ser nulo ou  está vazio");
+            throw new InvalidClientDataException("Nome do cliente é obrigatório.");
         }
 
         //validaçao phone não pode ser nulo ou está vazio
         if (phone == null || phone.trim().isEmpty()) {
-            throw new InvalidClientDataException("Erro: Número de telefone não poder ser nulo ou está vazio");
+            throw new InvalidClientDataException("Telefone do cliente é obrigatório.");
         }
         clientEntity.setName(nome);
         clientEntity.setPhone(phone);
@@ -63,23 +63,23 @@ public class ClientService {
     }
 
     public ClientResponseDTO findById(Long id) {
-        Client client = clientRepository.findById(id).orElseThrow(() -> new ClientNotFoundException("Erro: cliente não encontrado com id " + id));
+        Client client = clientRepository.findById(id).orElseThrow(() -> new ClientNotFoundException("Cliente não encontrado com ID: " + id));
         ClientResponseDTO clientResponseDTO = new ClientResponseDTO(client.getId(), client.getName(), client.getPhone());
         return clientResponseDTO;
     }
 
     public ClientResponseDTO updateClient(Long id, ClientRequestDTO clientRequestDTO) {
-        Client client = clientRepository.findById(id).orElseThrow(() -> new ClientNotFoundException("Erro: cliente não encontrado com id " + id));
+        Client client = clientRepository.findById(id).orElseThrow(() -> new ClientNotFoundException("Cliente não encontrado com ID: " + id));
 
         String name = clientRequestDTO.getName();
         String phone = clientRequestDTO.getPhone();
 
         if (name == null || name.trim().isEmpty()) {
-            throw new InvalidClientDataException("Erro: nome não pode ser nulo ou  está vazio");
+            throw new InvalidClientDataException("Nome do cliente é obrigatório.");
         }
 
         if (phone == null || phone.trim().isEmpty()) {
-            throw new InvalidClientDataException("Erro: Número de telefone não poder ser nulo ou está vazio");
+            throw new InvalidClientDataException("Telefone do cliente é obrigatório.");
         }
 
         client.setName(name);
@@ -95,10 +95,10 @@ public class ClientService {
         return clientResponseDTO;
     }
 
-    ;
+
 
     public void deleteClient(Long id) {
-        Client client = clientRepository.findById(id).orElseThrow(() -> new ClientNotFoundException("Erro: cliente não encontrado com id " + id));
+        Client client = clientRepository.findById(id).orElseThrow(() -> new ClientNotFoundException("Cliente não encontrado com ID: " + id));
         clientRepository.delete(client);
     }
 }

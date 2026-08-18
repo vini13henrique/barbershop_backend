@@ -37,110 +37,152 @@ public class AppointmentService {
         Long clientId = appointmentRequestDTO.getClientId();
 
         if (appointmentDate == null) {
-            throw new InvalidAppointmentDataException("Erro: Data não pode ser nula ou está vazia");
+            throw new InvalidAppointmentDataException("Data do agendamento é obrigatória.");
         }
 
         if (appointmentDate.isBefore(LocalDateTime.now())) {
-            throw new InvalidAppointmentDataException("Erro: Agendamento não pode ser realizado em uma data passada");
+            throw new InvalidAppointmentDataException("O agendamento não pode ser realizado em uma data passada.");
         }
 
         if (barberId == null) {
-            throw new InvalidAppointmentDataException("Erro: Id não pode ser nulo ou está vazio");
+            throw new InvalidAppointmentDataException("ID do barbeiro é obrigatório.");
         }
-        Barber barber = barberRepository.findById(barberId).orElseThrow(() -> new BarberNotFoundException("Barbeiro com id  " + barberId + " Não existe"));
+
+        Barber barber = barberRepository.findById(barberId)
+                .orElseThrow(() -> new BarberNotFoundException("Barbeiro não encontrado com ID: " + barberId));
 
         if (clientId == null) {
-            throw new InvalidAppointmentDataException("Erro: Id não pode ser nulo ou está vazio");
+            throw new InvalidAppointmentDataException("ID do cliente é obrigatório.");
         }
 
-        Client client = clientRepository.findById(clientId).orElseThrow(() -> new ClientNotFoundException("Cliente com id " + clientId + " Não existe"));
+        Client client = clientRepository.findById(clientId)
+                .orElseThrow(() -> new ClientNotFoundException("Cliente não encontrado com ID: " + clientId));
 
         boolean horarioOcupadoBarber = appointmentRepository.existsByBarberIdAndAppointmentDate(barberId, appointmentDate);
         boolean horarioOcupadoClient = appointmentRepository.existsByClientIdAndAppointmentDate(clientId, appointmentDate);
 
         if (horarioOcupadoBarber) {
-            throw new InvalidAppointmentDataException("Erro: Barbeiro já possui agendamento nesse horário");
+            throw new InvalidAppointmentDataException("Barbeiro já possui agendamento nesse horário.");
         }
 
         if (horarioOcupadoClient) {
-            throw new InvalidAppointmentDataException("Erro: Cliente já possui agendamento nesse horário");
+            throw new InvalidAppointmentDataException("Cliente já possui agendamento nesse horário.");
         }
 
         Appointment appointment = new Appointment(appointmentDate, barber, client);
         Appointment savedAppointment = appointmentRepository.save(appointment);
-        AppointmentResponseDTO appointmentResponseDTO = new AppointmentResponseDTO(savedAppointment.getId(), savedAppointment.getAppointmentDate(), savedAppointment.getBarber().getId(), savedAppointment.getBarber().getName(), savedAppointment.getClient().getId(), savedAppointment.getClient().getName());
+
+        AppointmentResponseDTO appointmentResponseDTO = new AppointmentResponseDTO(
+                savedAppointment.getId(),
+                savedAppointment.getAppointmentDate(),
+                savedAppointment.getBarber().getId(),
+                savedAppointment.getBarber().getName(),
+                savedAppointment.getClient().getId(),
+                savedAppointment.getClient().getName()
+        );
+
         return appointmentResponseDTO;
     }
 
     public AppointmentResponseDTO findById(Long id) {
-        Appointment appointment = appointmentRepository.findById(id).orElseThrow(() -> new AppointmentNotFoundException("Erro: agendamento não encontrado"));
-        AppointmentResponseDTO appointmentResponseDTO = new AppointmentResponseDTO(appointment.getId(), appointment.getAppointmentDate(), appointment.getBarber().getId(), appointment.getBarber().getName(), appointment.getClient().getId(), appointment.getClient().getName());
+        Appointment appointment = appointmentRepository.findById(id)
+                .orElseThrow(() -> new AppointmentNotFoundException("Agendamento não encontrado com ID: " + id));
+
+        AppointmentResponseDTO appointmentResponseDTO = new AppointmentResponseDTO(
+                appointment.getId(),
+                appointment.getAppointmentDate(),
+                appointment.getBarber().getId(),
+                appointment.getBarber().getName(),
+                appointment.getClient().getId(),
+                appointment.getClient().getName()
+        );
+
         return appointmentResponseDTO;
     }
 
     public List<AppointmentResponseDTO> getAll() {
-
-
         List<Appointment> appointments = appointmentRepository.findAll();
         List<AppointmentResponseDTO> appointmentResponseDTOS = new ArrayList<>();
 
         for (Appointment appointment : appointments) {
+            AppointmentResponseDTO dto = new AppointmentResponseDTO(
+                    appointment.getId(),
+                    appointment.getAppointmentDate(),
+                    appointment.getBarber().getId(),
+                    appointment.getBarber().getName(),
+                    appointment.getClient().getId(),
+                    appointment.getClient().getName()
+            );
 
-            AppointmentResponseDTO dto = new AppointmentResponseDTO(appointment.getId(), appointment.getAppointmentDate(), appointment.getBarber().getId(), appointment.getBarber().getName(), appointment.getClient().getId(), appointment.getClient().getName());
             appointmentResponseDTOS.add(dto);
         }
+
         return appointmentResponseDTOS;
     }
 
     public AppointmentResponseDTO update(Long id, AppointmentRequestDTO appointmentRequestDTO) {
-
-        Appointment saveAppointment = appointmentRepository.findById(id).orElseThrow(() -> new AppointmentNotFoundException("Erro: Agendamento não encontrado"));
+        Appointment appointment = appointmentRepository.findById(id)
+                .orElseThrow(() -> new AppointmentNotFoundException("Agendamento não encontrado com ID: " + id));
 
         LocalDateTime appointmentDate = appointmentRequestDTO.getAppointmentDate();
         Long barberId = appointmentRequestDTO.getBarberId();
         Long clientId = appointmentRequestDTO.getClientId();
 
         if (appointmentDate == null) {
-            throw new InvalidAppointmentDataException("Erro: Data não pode ser nula ou está vazia");
+            throw new InvalidAppointmentDataException("Data do agendamento é obrigatória.");
         }
 
         if (appointmentDate.isBefore(LocalDateTime.now())) {
-            throw new InvalidAppointmentDataException("Erro: Agendamento não pode ser realizado em uma data passada");
+            throw new InvalidAppointmentDataException("O agendamento não pode ser realizado em uma data passada.");
         }
-
 
         if (barberId == null) {
-            throw new InvalidAppointmentDataException("Erro: Id não pode ser nulo ou está vazio");
+            throw new InvalidAppointmentDataException("ID do barbeiro é obrigatório.");
         }
-        Barber barber = barberRepository.findById(barberId).orElseThrow(() -> new BarberNotFoundException("Barbeiro com id  " + barberId + " Não existe"));
+
+        Barber barber = barberRepository.findById(barberId)
+                .orElseThrow(() -> new BarberNotFoundException("Barbeiro não encontrado com ID: " + barberId));
 
         if (clientId == null) {
-            throw new InvalidAppointmentDataException("Erro: Id não pode ser nulo ou está vazio");
+            throw new InvalidAppointmentDataException("ID do cliente é obrigatório.");
         }
-        Client client = clientRepository.findById(clientId).orElseThrow(() -> new ClientNotFoundException("Cliente com id " + clientId + " Não existe"));
+
+        Client client = clientRepository.findById(clientId)
+                .orElseThrow(() -> new ClientNotFoundException("Cliente não encontrado com ID: " + clientId));
+
         boolean horarioOcupadoBarber = appointmentRepository.existsByBarberIdAndAppointmentDateAndIdNot(barberId, appointmentDate, id);
         boolean horarioOcupadoClient = appointmentRepository.existsByClientIdAndAppointmentDateAndIdNot(clientId, appointmentDate, id);
 
-        if (horarioOcupadoBarber == true) {
-            throw new InvalidAppointmentDataException("Barbeiro já possui agendamento nesse horário");
+        if (horarioOcupadoBarber) {
+            throw new InvalidAppointmentDataException("Barbeiro já possui agendamento nesse horário.");
         }
 
-        if(horarioOcupadoClient==true){
-            throw new InvalidAppointmentDataException("Client já possui agendamento nesse horário");
+        if (horarioOcupadoClient) {
+            throw new InvalidAppointmentDataException("Cliente já possui agendamento nesse horário.");
         }
 
-        saveAppointment.setAppointmentDate(appointmentDate);
-        saveAppointment.setBarber(barber);
-        saveAppointment.setClient(client);
-        appointmentRepository.save(saveAppointment);
+        appointment.setAppointmentDate(appointmentDate);
+        appointment.setBarber(barber);
+        appointment.setClient(client);
 
-        AppointmentResponseDTO appointmentResponseDTO = new AppointmentResponseDTO(saveAppointment.getId(), saveAppointment.getAppointmentDate(), saveAppointment.getBarber().getId(), saveAppointment.getBarber().getName(), saveAppointment.getClient().getId(), saveAppointment.getClient().getName());
+        Appointment savedAppointment = appointmentRepository.save(appointment);
+
+        AppointmentResponseDTO appointmentResponseDTO = new AppointmentResponseDTO(
+                savedAppointment.getId(),
+                savedAppointment.getAppointmentDate(),
+                savedAppointment.getBarber().getId(),
+                savedAppointment.getBarber().getName(),
+                savedAppointment.getClient().getId(),
+                savedAppointment.getClient().getName()
+        );
+
         return appointmentResponseDTO;
     }
 
     public void delete(Long id) {
-        Appointment appointment = appointmentRepository.findById(id).orElseThrow(() -> new AppointmentNotFoundException("Erro: id não encontrado " + id));
-        appointmentRepository.delete(appointment);
+        Appointment appointment = appointmentRepository.findById(id)
+                .orElseThrow(() -> new AppointmentNotFoundException("Agendamento não encontrado com ID: " + id));
 
+        appointmentRepository.delete(appointment);
     }
 }
