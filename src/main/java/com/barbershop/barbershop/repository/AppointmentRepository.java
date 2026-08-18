@@ -9,11 +9,23 @@ import java.time.LocalDateTime;
 @Repository
 public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
 
-  boolean  existsByBarberIdAndAppointmentDate(Long barbedId, LocalDateTime appointmentDate);
+    //Verifica conflito de barbeiro ao criar.
+    boolean existsByBarberIdAndAppointmentDate(
+            Long barberId,
+            LocalDateTime appointmentDate);
 
-  boolean existsByClientIdAndAppointmentDate(Long clientId, LocalDateTime appointmentDate);
+    boolean existsByClientIdAndAppointmentDate(
+            Long clientId,
+            LocalDateTime appointmentDate);
 
-  boolean  existsByBarberIdAndAppointmentDateAndIdNot(Long barberId  , LocalDateTime appointmentDate, Long appointmentId);
+    //Verifica conflito de barbeiro ao editar, ignorando o próprio agendamento.
+    boolean existsByBarberIdAndAppointmentDateAndIdNot(
+            Long barberId,
+            LocalDateTime appointmentDate,
+            Long appointmentId);
 
-  boolean existsByClientIdAndAppointmentDateAndIdNot(Long clientId, LocalDateTime appointmentDate, Long appointmentId);
+    boolean existsByClientIdAndAppointmentDateAndIdNot(
+            Long clientId,
+            LocalDateTime appointmentDate,
+            Long appointmentId);
 }

@@ -24,8 +24,7 @@ public class ClientService {
         List<Client> clients = clientRepository.findAll();
         List<ClientResponseDTO> clientResponseDTOS = new ArrayList<>();
 
-        for(Client client : clients){
-
+        for (Client client : clients) {
             ClientResponseDTO dto = new ClientResponseDTO(client.getId(), client.getName(), client.getPhone());
             clientResponseDTOS.add(dto);
         }
@@ -38,7 +37,7 @@ public class ClientService {
         String nome = client.getName();
         String phone = client.getPhone();
 
-        //validaçap nome não pode ser nulo ou está vazio
+        //validaçao nome não pode ser nulo ou está vazio
         if (nome == null || nome.trim().isEmpty()) {
             throw new InvalidClientDataException("Nome do cliente é obrigatório.");
         }
@@ -94,7 +93,6 @@ public class ClientService {
         );
         return clientResponseDTO;
     }
-
 
 
     public void deleteClient(Long id) {
